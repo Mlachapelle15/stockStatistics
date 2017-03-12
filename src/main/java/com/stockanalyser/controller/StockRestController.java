@@ -16,7 +16,7 @@ public class StockRestController {
   @Autowired
   private StockService stockService;
 
-  @RequestMapping(path = "/employees", method = RequestMethod.GET)
+  @RequestMapping(path = "/stocks", method = RequestMethod.GET)
   public List<Stock> getAllStocks() {
     return stockService.getAllStocks();
   }
