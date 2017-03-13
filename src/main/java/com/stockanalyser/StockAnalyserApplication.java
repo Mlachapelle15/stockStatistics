@@ -1,6 +1,7 @@
 package com.stockanalyser;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 
 import org.springframework.boot.CommandLineRunner;
@@ -9,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import com.stockanalyser.model.Stock;
+import com.stockanalyser.morningstar.Morningstar;
 
 import yahoofinance.YahooFinance;
 import yahoofinance.quotes.stock.StockDividend;
@@ -44,7 +46,11 @@ public class StockAnalyserApplication {
               stats.getEBITDA(),
               stats.getShortRatio(),
               stats.getBookValuePerShare()));
+
+          Morningstar.getQuotes(ticker);
         } catch (IOException e) {
+          System.err.println(e);
+        } catch (URISyntaxException e) {
           System.err.println(e);
         }
       });
