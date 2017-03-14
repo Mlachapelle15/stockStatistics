@@ -53,8 +53,15 @@ public class Stock {
   private BigDecimal fcfGrowth5y;
   @Column
   private BigDecimal fcfGrowth10y;
+  @Column
+  private BigDecimal roi1y;
+  @Column
+  private BigDecimal roi5y;
+  @Column
+  private BigDecimal roi10y;
 
-  public Stock(){
+
+  public Stock() {
 
   }
 
@@ -63,9 +70,9 @@ public class Stock {
     this.companyName = companyName;
   }
 
-  public Stock(String ticker, String companyName, BigDecimal pe, BigDecimal peg, BigDecimal annualYieldPercent, BigDecimal eps, BigDecimal roe, BigDecimal marketCap, BigDecimal oneYearTargetPrice, BigDecimal ebitda, BigDecimal shortRatio, BigDecimal bookValuePerShare, BigDecimal dividendGrowth5y, BigDecimal dividendGrowth10y, BigDecimal payoutRatio, BigDecimal morningstarStockEps, BigDecimal epsGrowth5y, BigDecimal epsGrowth10y, BigDecimal fcf, BigDecimal fcfGrowth5y, BigDecimal fcfGrowth10y) {
-    this.ticker = ticker;
-    this.companyName = companyName;
+  public Stock(String symbol, String name, BigDecimal pe, BigDecimal peg, BigDecimal annualYieldPercent, BigDecimal eps, BigDecimal roe, BigDecimal marketCap, BigDecimal oneYearTargetPrice, BigDecimal ebitda, BigDecimal shortRatio, BigDecimal bookValuePerShare, BigDecimal dividendGrowth5y, BigDecimal dividendGrowth10y, BigDecimal payoutRatio, BigDecimal morningstarStockEps, BigDecimal epsGrowth5y, BigDecimal epsGrowth10y, BigDecimal fcf, BigDecimal fcfGrowth5y, BigDecimal fcfGrowth10y, BigDecimal roi1y, BigDecimal roi5y, BigDecimal roi10y) {
+    this.ticker = symbol;
+    this.companyName = name;
     this.pe = pe;
     this.peg = peg;
     this.annualYieldPercent = annualYieldPercent;
@@ -85,6 +92,9 @@ public class Stock {
     this.fcf = fcf;
     this.fcfGrowth5y = fcfGrowth5y;
     this.fcfGrowth10y = fcfGrowth10y;
+    this.roi1y = roi1y;
+    this.roi5y = roi5y;
+    this.roi10y = roi10y;
   }
 
   public String getTicker() {
@@ -261,5 +271,29 @@ public class Stock {
 
   public void setFcfGrowth10y(BigDecimal fcfGrowth10y) {
     this.fcfGrowth10y = fcfGrowth10y;
+  }
+
+  public BigDecimal getRoi1y() {
+    return roi1y;
+  }
+
+  public void setRoi1y(BigDecimal roi1y) {
+    this.roi1y = roi1y;
+  }
+
+  public BigDecimal getRoi5y() {
+    return roi5y;
+  }
+
+  public void setRoi5y(BigDecimal roi5y) {
+    this.roi5y = roi5y;
+  }
+
+  public BigDecimal getRoi10y() {
+    return roi10y;
+  }
+
+  public void setRoi10y(BigDecimal roi10y) {
+    this.roi10y = roi10y;
   }
 }

@@ -11,6 +11,9 @@ import org.springframework.context.annotation.Bean;
 
 import com.stockanalyser.model.Stock;
 import com.stockanalyser.morningstar.Morningstar;
+import com.stockanalyser.morningstar.MorningstarQuotesRequest;
+import com.stockanalyser.morningstar.MorningstarROIRequest;
+import com.stockanalyser.morningstar.MorningstarStockROI;
 
 import yahoofinance.YahooFinance;
 import yahoofinance.quotes.stock.StockDividend;
@@ -34,7 +37,8 @@ public class StockAnalyserApplication {
 
           // stock.getHistory() TODO: this may be helpful in the future
 
-          Morningstar.MorningstarStock morningstarStock = Morningstar.getQuotes(ticker);
+          Morningstar.MorningstarStock morningstarStock = MorningstarQuotesRequest.getQuotes(ticker);
+          MorningstarStockROI roi = MorningstarROIRequest.getQuotes(ticker);
 
           Stock newStock = new Stock(stock.getSymbol(),
               stock.getName(),
@@ -56,7 +60,10 @@ public class StockAnalyserApplication {
               morningstarStock.getEpsGrowth10y(),
               morningstarStock.getFcf(),
               morningstarStock.getFcfGrowth5y(),
-              morningstarStock.getFcfGrowth10y());
+              morningstarStock.getFcfGrowth10y(),
+              roi.getRoi1y(),
+              roi.getRoi5y(),
+              roi.getRoi10y());
 
           repository.save(newStock);
         } catch (IOException e) {

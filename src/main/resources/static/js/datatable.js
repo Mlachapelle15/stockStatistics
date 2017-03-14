@@ -25,7 +25,10 @@ $(document).ready( function () {
                   { "mData": "epsGrowth10y"},
                   { "mData": "fcf"},
                   { "mData": "fcfGrowth5y"},
-                  { "mData": "fcfGrowth10y"}
+                  { "mData": "fcfGrowth10y"},
+                  { "mData": "roi1y"},
+                  { "mData": "roi5y"},
+                  { "mData": "roi10y"}
 			]
 	 })
 });
