@@ -15,7 +15,17 @@ $(document).ready( function () {
                   { "mData": "oneYearTargetPrice"},
                   { "mData": "ebitda"},
                   { "mData": "shortRatio"},
-                  { "mData": "bookValuePerShare"}
+                  { "mData": "bookValuePerShare"},
+
+                /*  { "mData": "dividendGrowth5y"},
+                  { "mData": "dividendGrowth10y"},
+                  { "mData": "payoutRatio"},
+                  { "mData": "morningstarStockEps"},
+                  { "mData": "epsGrowth5y"},
+                  { "mData": "epsGrowth10y"},
+                  { "mData": "fcf"},
+                  { "mData": "fcfGrowth5y"},
+                  { "mData": "fcfGrowth10y"}*/
 			]
 	 })
 });

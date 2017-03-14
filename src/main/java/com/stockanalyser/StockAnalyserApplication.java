@@ -34,7 +34,9 @@ public class StockAnalyserApplication {
 
           // stock.getHistory() TODO: this may be helpful in the future
 
-          repository.save(new Stock(stock.getSymbol(),
+          Morningstar.MorningstarStock morningstarStock = Morningstar.getQuotes(ticker);
+
+          Stock newStock = new Stock(stock.getSymbol(),
               stock.getName(),
               stats.getPe(),
               stats.getPeg(),
@@ -45,9 +47,18 @@ public class StockAnalyserApplication {
               stats.getOneYearTargetPrice(),
               stats.getEBITDA(),
               stats.getShortRatio(),
-              stats.getBookValuePerShare()));
+              stats.getBookValuePerShare(),
+              morningstarStock.getDividendGrowth5y(),
+              morningstarStock.getDividendGrowth10y(),
+              morningstarStock.getPayoutRatio(),
+              morningstarStock.getEps(),
+              morningstarStock.getEpsGrowth5y(),
+              morningstarStock.getEpsGrowth10y(),
+              morningstarStock.getFcf(),
+              morningstarStock.getFcfGrowth5y(),
+              morningstarStock.getFcfGrowth10y());
 
-          Morningstar.getQuotes(ticker);
+          repository.save(newStock);
         } catch (IOException e) {
           System.err.println(e);
         } catch (URISyntaxException e) {
