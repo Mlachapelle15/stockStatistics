@@ -17,7 +17,7 @@ $(document).ready( function () {
                   { "mData": "shortRatio"},
                   { "mData": "bookValuePerShare"},
 
-                /*  { "mData": "dividendGrowth5y"},
+                  { "mData": "dividendGrowth5y"},
                   { "mData": "dividendGrowth10y"},
                   { "mData": "payoutRatio"},
                   { "mData": "morningstarStockEps"},
@@ -25,7 +25,7 @@ $(document).ready( function () {
                   { "mData": "epsGrowth10y"},
                   { "mData": "fcf"},
                   { "mData": "fcfGrowth5y"},
-                  { "mData": "fcfGrowth10y"}*/
+                  { "mData": "fcfGrowth10y"}
 			]
 	 })
 });
