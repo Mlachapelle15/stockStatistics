@@ -1,6 +1,7 @@
 package com.stockanalyser.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.stockanalyser.model.Stock;
+import com.stockanalyser.model.StockScore;
 import com.stockanalyser.service.StockService;
 
 @RestController
@@ -19,6 +21,11 @@ public class StockRestController {
   @RequestMapping(path = "/stocks", method = RequestMethod.GET)
   public List<Stock> getAllStocks() {
     return stockService.getAllStocks();
+  }
+
+  @RequestMapping(path = "/stockScores", method = RequestMethod.GET)
+  public List<StockScore> getAllStockScores() {
+    return stockService.getAllStocks().stream().map(StockScore::new).collect(Collectors.toList());
   }
 
   // @RequestMapping(value = "/employee/{id}", method = RequestMethod.GET)

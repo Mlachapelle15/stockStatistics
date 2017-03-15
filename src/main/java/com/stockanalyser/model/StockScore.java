@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import java.math.BigDecimal;
 
 @Entity
-public class Stock {
+public class StockScore {
   @Id
   @Column(name = "ticker")
   private String ticker;
@@ -62,42 +62,26 @@ public class Stock {
   @Column
   private BigDecimal score;
 
-  public Stock() {
+  public StockScore() {
 
   }
 
-  public Stock(String ticker, String companyName) {
-    this.ticker = ticker;
-    this.companyName = companyName;
+  public StockScore(Stock stock) {
+    this.ticker = stock.getTicker();
+    this.companyName = stock.getCompanyName();
+    this.pe = computeScore(stock.getPe(), new BigDecimal(16.5), 2, true);
+    this.payoutRatio = computeScore(stock.getPayoutRatio(), new BigDecimal(90), 3, true);
+    this.annualYieldPercent = computeScore(stock.getAnnualYieldPercent(), new BigDecimal(3), new BigDecimal(6), 4, false);
+    this.dividendGrowth5y = computeScore(stock.getDividendGrowth5y(), new BigDecimal(0.20), 2, false);
+    this.dividendGrowth10y = computeScore(stock.getDividendGrowth10y(), new BigDecimal(0.20), 2, false);
+    this.score = getPe()
+        .add(getPayoutRatio())
+        .add(getAnnualYieldPercent())
+        .add(getDividendGrowth5y())
+        .add(getDividendGrowth10y());
   }
 
-  public Stock(String symbol, String name, BigDecimal pe, BigDecimal peg, BigDecimal annualYieldPercent, BigDecimal eps, BigDecimal roe, BigDecimal marketCap, BigDecimal oneYearTargetPrice, BigDecimal ebitda, BigDecimal shortRatio, BigDecimal bookValuePerShare, BigDecimal dividendGrowth5y, BigDecimal dividendGrowth10y, BigDecimal payoutRatio, BigDecimal morningstarStockEps, BigDecimal epsGrowth5y, BigDecimal epsGrowth10y, BigDecimal fcf, BigDecimal fcfGrowth5y, BigDecimal fcfGrowth10y, BigDecimal roi1y, BigDecimal roi5y, BigDecimal roi10y) {
-    this.ticker = symbol;
-    this.companyName = name;
-    this.pe = pe;
-    this.peg = peg;
-    this.annualYieldPercent = annualYieldPercent;
-    this.eps = eps;
-    this.roe = roe;
-    this.marketCap = marketCap;
-    this.oneYearTargetPrice = oneYearTargetPrice;
-    this.ebitda = ebitda;
-    this.shortRatio = shortRatio;
-    this.bookValuePerShare = bookValuePerShare;
-    this.dividendGrowth5y = dividendGrowth5y;
-    this.dividendGrowth10y = dividendGrowth10y;
-    this.payoutRatio = payoutRatio;
-    this.morningstarStockEps = morningstarStockEps;
-    this.epsGrowth5y = epsGrowth5y;
-    this.epsGrowth10y = epsGrowth10y;
-    this.fcf = fcf;
-    this.fcfGrowth5y = fcfGrowth5y;
-    this.fcfGrowth10y = fcfGrowth10y;
-    this.roi1y = roi1y;
-    this.roi5y = roi5y;
-    this.roi10y = roi10y;
-    this.score = BigDecimal.ZERO;
-  }
+  // TODO: 2017-03-15 I should create a DividendStockScore and a GrowthStockScore...
 
   public String getTicker() {
     return ticker;
@@ -306,4 +290,102 @@ public class Stock {
   public void setScore(BigDecimal score) {
     this.score = score;
   }
+
+  private BigDecimal computeScore(BigDecimal value, BigDecimal target, int maxScore, boolean lowerIsBest) {
+    BigDecimal maxScoreDecimal = new BigDecimal(maxScore);
+
+    if ((lowerIsBest && value.compareTo(target) <= 0)
+        || (!lowerIsBest && value.compareTo(target) >= 0)) {
+      return maxScoreDecimal;
+    }
+
+
+    BigDecimal percentDiffFromTarget = lowerIsBest ?
+        target.divide(value, 4).multiply(maxScoreDecimal)
+        : value.divide(target, 4).multiply(maxScoreDecimal);
+
+    System.out.println("Percent diff from target " + percentDiffFromTarget);
+
+    return percentDiffFromTarget;
+  }
+
+  private BigDecimal computeScore(BigDecimal value, BigDecimal targetMin, BigDecimal targetMax, int maxScore, boolean lowerIsBest) {
+    BigDecimal maxScoreDecimal = new BigDecimal(maxScore);
+
+    if (value.compareTo(targetMin) >= 0 && value.compareTo(targetMax) <= 0) {
+      return maxScoreDecimal;
+    }
+
+    BigDecimal percentDiffFromTarget =
+        computeScore(value, (value.compareTo(targetMin) >= 0) ? targetMax : targetMin, maxScore, lowerIsBest);
+
+    return percentDiffFromTarget;
+  }
+
+  public BigDecimal computeAndSetScore() {
+    return BigDecimal.ZERO;
+/*
+    if (stockObject.pe > 25) {
+      score -= 2;
+    }
+
+    if (stockObject.yield < 6 && stockObject.yield > 2) {
+      score += 2;
+    }
+
+    if (stockObject.divGrowth > 10) {
+      score++;
+    }
+
+    if (stockObject.divGrowth10 > 10) {
+      score++;
+    }
+
+    if (stockObject.payoutRatio > 100) {
+      score += 2;
+    }
+
+    if (stockObject.payoutRatio < 80 && stockObject.payoutRatio > 30) {
+      score += 2;
+    }
+
+    if (stockObject.eps1 > 6) {
+      score++;
+    }
+
+    if (stockObject.eps5 > 6) {
+      score++;
+    }
+
+    if (stockObject.eps10 > 6) {
+      score++;
+    }
+
+    if (stockObject.fcfGrowth1 > 6) {
+      score++;
+    }
+
+    if (stockObject.fcfGrowth5 > 6) {
+      score++;
+    }
+
+    if (stockObject.fcfGrowth10 > 6) {
+      score++;
+    }
+
+    if (stockObject.roi1 > 10) {
+      score++;
+    }
+
+    if (stockObject.roi5 > 12) {
+      score++;
+    }
+
+    if (stockObject.roi10 > 12) {
+      score++;
+    }
+    //todo mlachapelle: il manque la dette
+    stockObject.score = score;*/
+  }
+
 }
