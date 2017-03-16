@@ -63,45 +63,32 @@ public class Morningstar {
     }
 
     private void computePayoutRatio(List<BigDecimal> payoutRatios) {
-      logger.info("Payout ratios: " + payoutRatios);
       if (!payoutRatios.isEmpty()) {
         this.payoutRatio = payoutRatios.get(0);
       }
     }
 
     private void computeDividendStats(List<BigDecimal> dividends) {
-      logger.info("Dividends: " + dividends);
       if (dividends.size() > 0) {
         dividend = dividends.get(0);
-        logger.info("Dividend: " + dividend);
         compute5yAverage(dividends).ifPresent(divGrowth -> dividendGrowth5y = divGrowth);
-        logger.info("dividendGrowth5y: " + dividendGrowth5y);
         compute10yAverage(dividends).ifPresent(divGrowth -> dividendGrowth10y = divGrowth);
-        logger.info("dividendGrowth10y: " + dividendGrowth10y);
       }
     }
 
     private void computeEPSStats(List<BigDecimal> epsValues) {
-      logger.info("EPS: " + epsValues);
       if (epsValues.size() > 0) {
         eps = epsValues.get(0);
-        logger.info("EPS: " + eps);
         compute5yAverage(epsValues).ifPresent(divGrowth -> epsGrowth5y = divGrowth);
-        logger.info("epsGrowth5y: " + epsGrowth5y);
         compute10yAverage(epsValues).ifPresent(divGrowth -> epsGrowth10y = divGrowth);
-        logger.info("epsGrowth10y: " + epsGrowth10y);
       }
     }
 
     private void computeFCFStats(List<BigDecimal> fcfValues) {
-      logger.info("FCF: " + fcfValues);
       if (fcfValues.size() > 0) {
         fcf = fcfValues.get(0);
-        logger.info("FCF: " + fcf);
         compute5yAverage(fcfValues).ifPresent(divGrowth -> fcfGrowth5y = divGrowth);
-        logger.info("fcfGrowth5y: " + fcfGrowth5y);
         compute10yAverage(fcfValues).ifPresent(divGrowth -> fcfGrowth10y = divGrowth);
-        logger.info("fcfGrowth10y: " + fcfGrowth10y);
       }
     }
 

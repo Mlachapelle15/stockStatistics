@@ -13,6 +13,8 @@ public class Stock {
   private String ticker;
   @Column(name = "company_name")
   private String companyName;
+  @Column(name = "quote")
+  private BigDecimal quote;
   @Column(name = "dividend_yield")
   private BigDecimal dividendYield;
   @Column(name = "pe")
@@ -66,14 +68,10 @@ public class Stock {
 
   }
 
-  public Stock(String ticker, String companyName) {
-    this.ticker = ticker;
-    this.companyName = companyName;
-  }
-
-  public Stock(String symbol, String name, BigDecimal pe, BigDecimal peg, BigDecimal annualYieldPercent, BigDecimal eps, BigDecimal roe, BigDecimal marketCap, BigDecimal oneYearTargetPrice, BigDecimal ebitda, BigDecimal shortRatio, BigDecimal bookValuePerShare, BigDecimal dividendGrowth5y, BigDecimal dividendGrowth10y, BigDecimal payoutRatio, BigDecimal morningstarStockEps, BigDecimal epsGrowth5y, BigDecimal epsGrowth10y, BigDecimal fcf, BigDecimal fcfGrowth5y, BigDecimal fcfGrowth10y, BigDecimal roi1y, BigDecimal roi5y, BigDecimal roi10y) {
+  public Stock(String symbol, String name, BigDecimal quote, BigDecimal pe, BigDecimal peg, BigDecimal annualYieldPercent, BigDecimal eps, BigDecimal roe, BigDecimal marketCap, BigDecimal oneYearTargetPrice, BigDecimal ebitda, BigDecimal shortRatio, BigDecimal bookValuePerShare, BigDecimal dividendGrowth5y, BigDecimal dividendGrowth10y, BigDecimal payoutRatio, BigDecimal morningstarStockEps, BigDecimal epsGrowth5y, BigDecimal epsGrowth10y, BigDecimal fcf, BigDecimal fcfGrowth5y, BigDecimal fcfGrowth10y, BigDecimal roi1y, BigDecimal roi5y, BigDecimal roi10y) {
     this.ticker = symbol;
     this.companyName = name;
+    this.quote = quote;
     this.pe = pe;
     this.peg = peg;
     this.annualYieldPercent = annualYieldPercent;
@@ -305,5 +303,13 @@ public class Stock {
 
   public void setScore(BigDecimal score) {
     this.score = score;
+  }
+
+  public BigDecimal getQuote() {
+    return quote;
+  }
+
+  public void setQuote(BigDecimal quote) {
+    this.quote = quote;
   }
 }

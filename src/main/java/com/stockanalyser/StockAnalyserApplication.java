@@ -42,6 +42,7 @@ public class StockAnalyserApplication {
 
           Stock newStock = new Stock(stock.getSymbol(),
               stock.getName(),
+              stock.getQuote().getPrice(),
               stats.getPe(),
               stats.getPeg(),
               dividend.getAnnualYieldPercent(),

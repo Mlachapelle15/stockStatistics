@@ -8,6 +8,11 @@ import java.math.BigDecimal;
 
 @Entity
 public class StockScore {
+  private static final BigDecimal MAX_PE = new BigDecimal(25);
+  private static final BigDecimal PE_TARGET = new BigDecimal(17.5);
+  private static final BigDecimal SIX_PERCENT = new BigDecimal(.06);
+  private static final BigDecimal TWELVE_PERCENT = new BigDecimal(.12);
+  private static final BigDecimal TWO_HUNDREAD = new BigDecimal(200);
   @Id
   @Column(name = "ticker")
   private String ticker;
@@ -69,16 +74,35 @@ public class StockScore {
   public StockScore(Stock stock) {
     this.ticker = stock.getTicker();
     this.companyName = stock.getCompanyName();
-    this.pe = computeScore(stock.getPe(), new BigDecimal(16.5), 2, true);
-    this.payoutRatio = computeScore(stock.getPayoutRatio(), new BigDecimal(90), 3, true);
+    this.pe = stock.getPe().compareTo(MAX_PE) > 0
+        ? BigDecimal.ONE.negate()
+        :computeScore(stock.getPe(), PE_TARGET, 2, true);
+    this.payoutRatio = computeScore(stock.getPayoutRatio(), new BigDecimal(0), new BigDecimal(85), 3, false);
     this.annualYieldPercent = computeScore(stock.getAnnualYieldPercent(), new BigDecimal(3), new BigDecimal(6), 4, false);
-    this.dividendGrowth5y = computeScore(stock.getDividendGrowth5y(), new BigDecimal(0.20), 2, false);
-    this.dividendGrowth10y = computeScore(stock.getDividendGrowth10y(), new BigDecimal(0.20), 2, false);
+    this.dividendGrowth5y = computeScore(stock.getDividendGrowth5y(), new BigDecimal(0.20), new BigDecimal(10), 2, false);
+    this.dividendGrowth10y = computeScore(stock.getDividendGrowth10y(), new BigDecimal(0.20), new BigDecimal(10), 2, false);
+    // TODO: 2017-03-16 the use of 2 param with .20 to 10 is a hack. The value does not drop fast enough with the other method.
+    // TODO: 2017-03-16 Limit the result to be between maxScore and -maxScore
+    this.roi1y = computeScore(stock.getRoi1y(), new BigDecimal(12), TWO_HUNDREAD, 1, false);
+    this.roi5y = computeScore(stock.getRoi5y(), new BigDecimal(12), TWO_HUNDREAD, 1, false);
+    this.roi10y = computeScore(stock.getRoi10y(), new BigDecimal(12), TWO_HUNDREAD, 1, false);
+    //this.fcf = computeScore(stock.getFcf(), new BigDecimal(12), new BigDecimal(200), 1, false);
+    this.fcfGrowth5y = computeScore(stock.getFcfGrowth5y(), SIX_PERCENT, TWO_HUNDREAD, 1, false);
+    this.fcfGrowth10y = computeScore(stock.getFcfGrowth10y(), SIX_PERCENT, TWO_HUNDREAD, 1, false);
+    this.epsGrowth5y = computeScore(stock.getEpsGrowth5y(), SIX_PERCENT, TWO_HUNDREAD, 1, false);
+    this.epsGrowth10y = computeScore(stock.getEpsGrowth10y(), SIX_PERCENT, TWO_HUNDREAD, 1, false);
     this.score = getPe()
         .add(getPayoutRatio())
         .add(getAnnualYieldPercent())
         .add(getDividendGrowth5y())
-        .add(getDividendGrowth10y());
+        .add(getDividendGrowth10y())
+        .add(getRoi1y())
+        .add(getRoi5y())
+        .add(getRoi10y())
+        .add(getFcfGrowth5y())
+        .add(getFcfGrowth10y())
+        .add(getEpsGrowth5y())
+        .add(getEpsGrowth10y());
   }
 
   // TODO: 2017-03-15 I should create a DividendStockScore and a GrowthStockScore...
@@ -299,30 +323,29 @@ public class StockScore {
       return maxScoreDecimal;
     }
 
-
-    BigDecimal percentDiffFromTarget = lowerIsBest ?
-        target.divide(value, 4).multiply(maxScoreDecimal)
+    BigDecimal percentDiffFromTarget = lowerIsBest
+        ? target.divide(value, 4).multiply(maxScoreDecimal)
         : value.divide(target, 4).multiply(maxScoreDecimal);
 
-    System.out.println("Percent diff from target " + percentDiffFromTarget);
+    System.out.println("Percent diff from value(" + value + ") to target (" + target + ") %diff=" + percentDiffFromTarget);
 
-    return percentDiffFromTarget;
+    return maxScoreDecimal.subtract(percentDiffFromTarget);
   }
 
   private BigDecimal computeScore(BigDecimal value, BigDecimal targetMin, BigDecimal targetMax, int maxScore, boolean lowerIsBest) {
     BigDecimal maxScoreDecimal = new BigDecimal(maxScore);
 
-    if (value.compareTo(targetMin) >= 0 && value.compareTo(targetMax) <= 0) {
+    if ((value.compareTo(targetMin) >= 0) && (value.compareTo(targetMax) <= 0)) {
       return maxScoreDecimal;
     }
 
     BigDecimal percentDiffFromTarget =
         computeScore(value, (value.compareTo(targetMin) >= 0) ? targetMax : targetMin, maxScore, lowerIsBest);
 
-    return percentDiffFromTarget;
+    return maxScoreDecimal.subtract(percentDiffFromTarget);
   }
 
-  public BigDecimal computeAndSetScore() {
+  public BigDecimal donotuse() {
     return BigDecimal.ZERO;
 /*
     if (stockObject.pe > 25) {

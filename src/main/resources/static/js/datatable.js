@@ -6,6 +6,7 @@ $(document).ready( function () {
 			"aoColumns": [
 			      { "mData": "ticker"},
 		          { "mData": "companyName" },
+		          { "mData": "quote" },
                   { "mData": "pe"},
                   { "mData": "peg"},
                   { "mData": "annualYieldPercent"},

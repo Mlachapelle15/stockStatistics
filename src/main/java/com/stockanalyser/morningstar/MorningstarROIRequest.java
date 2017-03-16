@@ -45,9 +45,9 @@ public class MorningstarROIRequest {
       }
     }
 
-    String roi1y = tableData.get(tableHeader.indexOf("1-Year"));
-    String roi5y = tableData.get(tableHeader.indexOf("5-Year"));
-    String roi10y = tableData.get(tableHeader.indexOf("10-Year"));
+    String roi1y = tableData.size() >= tableHeader.indexOf("1-Year") ? tableData.get(tableHeader.indexOf("1-Year")) : "0";
+    String roi5y = tableData.size() >= tableHeader.indexOf("5-Year") ? tableData.get(tableHeader.indexOf("5-Year")) : "0";
+    String roi10y = tableData.size() >= tableHeader.indexOf("10-Year") ? tableData.get(tableHeader.indexOf("10-Year")) : "0";
 
 
     return new MorningstarStockROI(roi1y, roi5y, roi10y);
