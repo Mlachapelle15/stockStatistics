@@ -1,6 +1,7 @@
 package com.stockanalyser;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 
 import org.springframework.boot.CommandLineRunner;
@@ -9,6 +10,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import com.stockanalyser.model.Stock;
+import com.stockanalyser.morningstar.Morningstar;
+import com.stockanalyser.morningstar.MorningstarQuotesRequest;
+import com.stockanalyser.morningstar.MorningstarROIRequest;
+import com.stockanalyser.morningstar.MorningstarStockROI;
 
 import yahoofinance.YahooFinance;
 import yahoofinance.quotes.stock.StockDividend;
@@ -32,8 +37,12 @@ public class StockAnalyserApplication {
 
           // stock.getHistory() TODO: this may be helpful in the future
 
-          repository.save(new Stock(stock.getSymbol(),
+          Morningstar.MorningstarStock morningstarStock = MorningstarQuotesRequest.getQuotes(ticker);
+          MorningstarStockROI roi = MorningstarROIRequest.getQuotes(ticker);
+
+          Stock newStock = new Stock(stock.getSymbol(),
               stock.getName(),
+              stock.getQuote().getPrice(),
               stats.getPe(),
               stats.getPeg(),
               dividend.getAnnualYieldPercent(),
@@ -43,8 +52,24 @@ public class StockAnalyserApplication {
               stats.getOneYearTargetPrice(),
               stats.getEBITDA(),
               stats.getShortRatio(),
-              stats.getBookValuePerShare()));
+              stats.getBookValuePerShare(),
+              morningstarStock.getDividendGrowth5y(),
+              morningstarStock.getDividendGrowth10y(),
+              morningstarStock.getPayoutRatio(),
+              morningstarStock.getEps(),
+              morningstarStock.getEpsGrowth5y(),
+              morningstarStock.getEpsGrowth10y(),
+              morningstarStock.getFcf(),
+              morningstarStock.getFcfGrowth5y(),
+              morningstarStock.getFcfGrowth10y(),
+              roi.getRoi1y(),
+              roi.getRoi5y(),
+              roi.getRoi10y());
+
+          repository.save(newStock);
         } catch (IOException e) {
+          System.err.println(e);
+        } catch (URISyntaxException e) {
           System.err.println(e);
         }
       });
