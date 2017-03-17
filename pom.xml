@@ -63,6 +63,11 @@
             <artifactId>nekohtml</artifactId>
             <version>1.9.21</version><!--$NO-MVN-MAN-VER$ -->
         </dependency>
+        <dependency>
+            <groupId>com.yahoofinance-api</groupId>
+            <artifactId>YahooFinanceAPI</artifactId>
+            <version>RELEASE</version>
+        </dependency>
     </dependencies>
 
     <build>

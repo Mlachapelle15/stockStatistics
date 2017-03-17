@@ -1,16 +1,18 @@
 package com.stockanalyser;
 
-import java.util.List;
+import java.io.IOException;
+import java.util.Arrays;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.rest.core.annotation.RepositoryRestResource;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.context.annotation.Bean;
 
 import com.stockanalyser.model.Stock;
+
+import yahoofinance.YahooFinance;
+import yahoofinance.quotes.stock.StockDividend;
+import yahoofinance.quotes.stock.StockStats;
 
 @SpringBootApplication
 public class StockAnalyserApplication {
@@ -19,59 +21,37 @@ public class StockAnalyserApplication {
     SpringApplication.run(StockAnalyserApplication.class, args);
   }
 
- /* @Bean
+  @Bean
   public CommandLineRunner commandLineRunner(StockRepository repository) {
     return args -> {
-      Arrays.asList("TD.TO", "SJ.TO").forEach(ticker -> repository.save(new Stock(ticker)));
+      Arrays.asList("TD.TO", "SJ.TO").forEach(ticker -> {
+        try {
+          yahoofinance.Stock stock = YahooFinance.get(ticker);
+          StockStats stats = stock.getStats();
+          StockDividend dividend = stock.getDividend();
+
+          // stock.getHistory() TODO: this may be helpful in the future
+
+          repository.save(new Stock(stock.getSymbol(),
+              stock.getName(),
+              stats.getPe(),
+              stats.getPeg(),
+              dividend.getAnnualYieldPercent(),
+              stats.getEps(),
+              stats.getROE(),
+              stats.getMarketCap(),
+              stats.getOneYearTargetPrice(),
+              stats.getEBITDA(),
+              stats.getShortRatio(),
+              stats.getBookValuePerShare()));
+        } catch (IOException e) {
+          System.err.println(e);
+        }
+      });
 
       repository.findAll().stream().forEach(t -> System.out.println(t));
     };
-  }*/
-}/*
-
-@RestController
-class StockRestController {
-  @RequestMapping(path = "/stocks", method = RequestMethod.GET)
-  Collection<Stock> stocks() {
-    return this.stockRepository.findAll();
   }
-
-  @Autowired
-  StockRepository stockRepository;
-}*/
-
-// todo: this display the table but without data
-/*@Controller
-class StockMvcController {
-  @RequestMapping("/stocks")
-  String stock(Model model) {
-    model.addAttribute("stocks", this.stockRepository.findAll());
-    return "stocks"; //src/main/resources/templates/ + $x + .html
-  }
-
-  @Autowired
-  StockRepository stockRepository;
-}*/
-
-@RestController
-class StockMvcController {
-  @RequestMapping("/stocks")
-  public List<Stock> stocks() {
-    return stockRepository.findAll();
-  }
-
-  @Autowired
-  StockRepository stockRepository;
 }
-
-
-  /*@Component
-  class StockResourceProcessor implements ResourceProcessor<Resource<Stock>>{
-
-    @Override
-    public Resource<Stock> process(Resource<Stock> stockResource) {
-      return null;
-    }
-  }*/
 
 
