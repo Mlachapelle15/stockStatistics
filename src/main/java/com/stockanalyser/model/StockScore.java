@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 @Entity
 public class StockScore {
@@ -74,9 +75,9 @@ public class StockScore {
   public StockScore(Stock stock) {
     this.ticker = stock.getTicker();
     this.companyName = stock.getCompanyName();
-    this.pe = stock.getPe().compareTo(MAX_PE) > 0
+    this.pe = Optional.ofNullable(stock.getPe()).map(pe -> pe.compareTo(MAX_PE) > 0).orElse(true)
         ? BigDecimal.ONE.negate()
-        :computeScore(stock.getPe(), PE_TARGET, 2, true);
+        : computeScore(stock.getPe(), PE_TARGET, 2, true);
     this.payoutRatio = computeScore(stock.getPayoutRatio(), new BigDecimal(0), new BigDecimal(85), 3, false);
     this.annualYieldPercent = computeScore(stock.getAnnualYieldPercent(), new BigDecimal(3), new BigDecimal(6), 4, false);
     this.dividendGrowth5y = computeScore(stock.getDividendGrowth5y(), new BigDecimal(0.20), new BigDecimal(10), 2, false);
@@ -103,6 +104,8 @@ public class StockScore {
         .add(getFcfGrowth10y())
         .add(getEpsGrowth5y())
         .add(getEpsGrowth10y());
+
+    // TODO: 2017-03-16 manque la dette
   }
 
   // TODO: 2017-03-15 I should create a DividendStockScore and a GrowthStockScore...
@@ -344,71 +347,4 @@ public class StockScore {
 
     return maxScoreDecimal.subtract(percentDiffFromTarget);
   }
-
-  public BigDecimal donotuse() {
-    return BigDecimal.ZERO;
-/*
-    if (stockObject.pe > 25) {
-      score -= 2;
-    }
-
-    if (stockObject.yield < 6 && stockObject.yield > 2) {
-      score += 2;
-    }
-
-    if (stockObject.divGrowth > 10) {
-      score++;
-    }
-
-    if (stockObject.divGrowth10 > 10) {
-      score++;
-    }
-
-    if (stockObject.payoutRatio > 100) {
-      score += 2;
-    }
-
-    if (stockObject.payoutRatio < 80 && stockObject.payoutRatio > 30) {
-      score += 2;
-    }
-
-    if (stockObject.eps1 > 6) {
-      score++;
-    }
-
-    if (stockObject.eps5 > 6) {
-      score++;
-    }
-
-    if (stockObject.eps10 > 6) {
-      score++;
-    }
-
-    if (stockObject.fcfGrowth1 > 6) {
-      score++;
-    }
-
-    if (stockObject.fcfGrowth5 > 6) {
-      score++;
-    }
-
-    if (stockObject.fcfGrowth10 > 6) {
-      score++;
-    }
-
-    if (stockObject.roi1 > 10) {
-      score++;
-    }
-
-    if (stockObject.roi5 > 12) {
-      score++;
-    }
-
-    if (stockObject.roi10 > 12) {
-      score++;
-    }
-    //todo mlachapelle: il manque la dette
-    stockObject.score = score;*/
-  }
-
 }
