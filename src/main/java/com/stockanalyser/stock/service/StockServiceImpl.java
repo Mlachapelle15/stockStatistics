@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.stockanalyser.StockRepository;
 import com.stockanalyser.model.Stock;
 
-@Service("employeeService")
+@Service("stockService")
 public class StockServiceImpl implements StockService {
 
   @Autowired
@@ -18,10 +18,4 @@ public class StockServiceImpl implements StockService {
   public List<Stock> getAllStocks() {
     return stockRepository.findAll();
   }
-
-  //@Override
-  //public Employee getEmployeeById(long id) {
-  //  return stockRepository.findOne(id);
-  //}
-
 }

@@ -1,4 +1,4 @@
-package com.stockanalyser.morningstar;
+package com.stockanalyser.stock.morningstar;
 
 import static org.apache.http.HttpVersion.*;
 

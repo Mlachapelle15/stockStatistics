@@ -1,4 +1,4 @@
-package com.stockanalyser.morningstar;
+package com.stockanalyser.stock.morningstar;
 
 import java.io.IOException;
 import java.net.URISyntaxException;

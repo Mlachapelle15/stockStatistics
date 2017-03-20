@@ -7,15 +7,22 @@ import javax.persistence.Id;
 import java.math.BigDecimal;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Value;
+
 @Entity
 public class StockScore {
+  @Value("score.target.pe")
+  private int targetPE;
+
+  @Value("score.target.div.growth")
+  private String targetDivGrowth;
+
   private static final BigDecimal MAX_PE = new BigDecimal(25);
   private static final BigDecimal PE_TARGET = new BigDecimal(17.5);
   private static final BigDecimal SIX = new BigDecimal(6);
   private static final BigDecimal TWELVE = new BigDecimal(12);
   private static final BigDecimal TWENTY = new BigDecimal(20);
   private static final BigDecimal TWO_HUNDREAD = new BigDecimal(200);
-  private static final BigDecimal HUNDREAD = new BigDecimal(100);
   @Id
   @Column(name = "ticker")
   private String ticker;
@@ -82,18 +89,18 @@ public class StockScore {
         : computeScore(stock.getPe(), PE_TARGET, 2, true);
     this.payoutRatio = computeScore(stock.getPayoutRatio(), new BigDecimal(0), new BigDecimal(85), 3, false);
     this.annualYieldPercent = computeScore(stock.getAnnualYieldPercent(), new BigDecimal(3), new BigDecimal(6), 4, false);
-    this.dividendGrowth5y = computeScore(stock.getDividendGrowth5y().multiply(HUNDREAD), TWENTY, new BigDecimal(10), 2, false);
-    this.dividendGrowth10y = computeScore(stock.getDividendGrowth10y().multiply(HUNDREAD), TWENTY, new BigDecimal(10), 2, false);
+    this.dividendGrowth5y = computeScore(stock.getDividendGrowth5y(), TWENTY, new BigDecimal(10), 2, false);
+    this.dividendGrowth10y = computeScore(stock.getDividendGrowth10y(), TWENTY, new BigDecimal(10), 2, false);
     // TODO: 2017-03-16 the use of 2 param with .20 to 10 is a hack. The value does not drop fast enough with the other method.
     // TODO: 2017-03-16 Limit the result to be between maxScore and -maxScore
     this.roi1y = computeScore(stock.getRoi1y(), TWELVE, TWO_HUNDREAD, 1, false);
     this.roi5y = computeScore(stock.getRoi5y(), TWELVE, TWO_HUNDREAD, 1, false);
     this.roi10y = computeScore(stock.getRoi10y(), TWELVE, TWO_HUNDREAD, 1, false);
     //this.fcf = computeScore(stock.getFcf(), new BigDecimal(12), new BigDecimal(200), 1, false);
-    this.fcfGrowth5y = computeScore(stock.getFcfGrowth5y().multiply(HUNDREAD), SIX, TWO_HUNDREAD, 1, false);
-    this.fcfGrowth10y = computeScore(stock.getFcfGrowth10y().multiply(HUNDREAD), SIX, TWO_HUNDREAD, 1, false);
-    this.epsGrowth5y = computeScore(stock.getEpsGrowth5y().multiply(HUNDREAD), SIX, TWO_HUNDREAD, 1, false);
-    this.epsGrowth10y = computeScore(stock.getEpsGrowth10y().multiply(HUNDREAD), SIX, TWO_HUNDREAD, 1, false);
+    this.fcfGrowth5y = computeScore(stock.getFcfGrowth5y(), SIX, TWO_HUNDREAD, 1, false);
+    this.fcfGrowth10y = computeScore(stock.getFcfGrowth10y(), SIX, TWO_HUNDREAD, 1, false);
+    this.epsGrowth5y = computeScore(stock.getEpsGrowth5y(), SIX, TWO_HUNDREAD, 1, false);
+    this.epsGrowth10y = computeScore(stock.getEpsGrowth10y(), SIX, TWO_HUNDREAD, 1, false);
     this.score = getPe()
         .add(getPayoutRatio())
         .add(getAnnualYieldPercent())

@@ -5,9 +5,11 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 @Entity
 public class Stock {
+  private static final BigDecimal HUNDREAD = new BigDecimal(100);
   @Id
   @Column(name = "ticker")
   private String ticker;
@@ -77,20 +79,20 @@ public class Stock {
     this.annualYieldPercent = annualYieldPercent;
     this.eps = eps;
     this.roe = roe;
-    this.marketCap = marketCap;
+    this.marketCap = Optional.ofNullable(marketCap).map(cap ->cap.divideToIntegralValue(BigDecimal.valueOf(1000000))).orElse(BigDecimal.ZERO);
     this.oneYearTargetPrice = oneYearTargetPrice;
-    this.ebitda = ebitda;
+    this.ebitda = ebitda.divideToIntegralValue(BigDecimal.valueOf(1000000));
     this.shortRatio = shortRatio;
     this.bookValuePerShare = bookValuePerShare;
-    this.dividendGrowth5y = dividendGrowth5y;
-    this.dividendGrowth10y = dividendGrowth10y;
+    this.dividendGrowth5y = dividendGrowth5y.multiply(HUNDREAD);
+    this.dividendGrowth10y = dividendGrowth10y.multiply(HUNDREAD);
     this.payoutRatio = payoutRatio;
     this.morningstarStockEps = morningstarStockEps;
-    this.epsGrowth5y = epsGrowth5y;
-    this.epsGrowth10y = epsGrowth10y;
+    this.epsGrowth5y = epsGrowth5y.multiply(HUNDREAD);
+    this.epsGrowth10y = epsGrowth10y.multiply(HUNDREAD);
     this.fcf = fcf;
-    this.fcfGrowth5y = fcfGrowth5y;
-    this.fcfGrowth10y = fcfGrowth10y;
+    this.fcfGrowth5y = fcfGrowth5y.multiply(HUNDREAD);
+    this.fcfGrowth10y = fcfGrowth10y.multiply(HUNDREAD);
     this.roi1y = roi1y;
     this.roi5y = roi5y;
     this.roi10y = roi10y;
