@@ -1,36 +1,95 @@
 package com.stockanalyser;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Arrays;
-
-import org.h2.tools.Server;
-import org.springframework.boot.CommandLineRunner;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-
-import com.stockanalyser.model.Stock;
-import com.stockanalyser.morningstar.Morningstar;
-import com.stockanalyser.morningstar.MorningstarQuotesRequest;
-import com.stockanalyser.morningstar.MorningstarROIRequest;
-import com.stockanalyser.morningstar.MorningstarStockROI;
-
-import yahoofinance.YahooFinance;
-import yahoofinance.quotes.stock.StockDividend;
-import yahoofinance.quotes.stock.StockStats;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
+@EnableAutoConfiguration
+@ComponentScan(basePackages = "com.stockanalyser")
+@EntityScan(basePackages = {"com.stockanalyser"})
 public class StockAnalyserApplication {
-  private static final String DBNAME = "test";
+  private static final String DBNAME = "ticker";
+
 
   public static void main(String[] args) throws Exception {
     SpringApplication.run(StockAnalyserApplication.class, args);
+
+
+/*
+    // open the in-memory database within a VM
+
+    Class.forName("org.h2.Driver"); // (1)
+    Connection conn
+        = DriverManager.getConnection("jdbc:h2:mem:" + DBNAME, "sa", "sa"); // (2)
+    // username:password are very important and must be used for connecting via H2 Console
+
+    Statement stat = conn.createStatement(); // (3)
+    stat.executeUpdate("create table mytbl(ticker varchar(255) primary key )");
+    stat.executeUpdate("insert into mytbl values('RY.TO')");
+    //stat.executeUpdate("insert into mytbl values(2, 'World')");
+
+    // Verify that sample data was really inserted
+    ResultSet rs = stat.executeQuery("select * from mytbl");
+    System.out.println("ResultSet output:");
+    while (rs.next()) {
+      System.out.println("> " + rs.getString("ticker"));
+    }
+
+    // start a TCP server
+    Server server = Server.createTcpServer().start(); // (4)
+    // .. use in embedded mode ..
+
+    // or use it from another process:
+    System.out.println("Server started and connection is open.");
+    System.out.println("URL: jdbc:h2:" + server.getURL() + "/mem:" + DBNAME);
+
+    System.out.println("\n");
+    System.out.println(
+        "now start the H2 Console in another process using:\n" +
+            "$ cd h2/bin; java -cp h2-1.4.185.jar org.h2.tools.Console -web -browser");
+
+
+
+    System.out.println("Press [Enter] to stop.");
+    System.in.read();
+
+    System.out.println("Stopping server and closing the connection");
+
+    rs.close();
+    server.stop();
+    conn.close();
+    System.out.println("Server is STOPPED");*/
+  }
+
+  /*@Bean(name = "dataSource")
+  public DriverManagerDataSource dataSource() {
+    DriverManagerDataSource dataSource = new DriverManagerDataSource();
+    dataSource.setDriverClassName("org.h2.Driver");
+    dataSource.setUrl("jdbc:h2:~/test;MV_STORE=false");
+    dataSource.setUsername("sa");
+    dataSource.setPassword("sa");
+
+    // schema init
+    Resource initSchema = new ClassPathResource("scripts/schema.sql");
+    Resource initData = new ClassPathResource("scripts/data.sql");
+    Resource selectData = new ClassPathResource("scripts/select-data.sql");
+    DatabasePopulator databasePopulator = new ResourceDatabasePopulator(initSchema, initData, selectData);
+    DatabasePopulatorUtils.execute(databasePopulator, dataSource);
+
+    return dataSource;
+  }*/
+
+  @Value("${score.target.div.growth}")
+  private String[] test;
+
+ /* @Bean
+  //@DependsOn("dataSource")
+  //public CommandLineRunner commandLineRunner(StockRepository repository) throws Exception {
+  public ApplicationRunner applicationRunner(StockRepository repository) throws Exception {
 
     // open the in-memory database within a VM
 
@@ -40,12 +99,12 @@ public class StockAnalyserApplication {
     // username:password are very important and must be used for connecting via H2 Console
 
     Statement stat = conn.createStatement(); // (3)
-    stat.executeUpdate("create table mytbl(id int primary key, name varchar(255))");
-    stat.executeUpdate("insert into mytbl values(1, 'Hello')");
-    stat.executeUpdate("insert into mytbl values(2, 'World')");
+    //stat.executeUpdate("create table mytbl(ticker varchar(255) primary key )");
+    //stat.executeUpdate("insert into mytbl values('RY.TO')");
+    //stat.executeUpdate("insert into mytbl values(2, 'World')");
 
     // Verify that sample data was really inserted
-    ResultSet rs = stat.executeQuery("select * from mytbl");
+    ResultSet rs = stat.executeQuery("select * from ticker");
     System.out.println("ResultSet output:");
     while (rs.next()) {
       System.out.println("> " + rs.getString("name"));
@@ -64,6 +123,8 @@ public class StockAnalyserApplication {
         "now start the H2 Console in another process using:\n" +
             "$ cd h2/bin; java -cp h2-1.4.185.jar org.h2.tools.Console -web -browser");
 
+
+
     System.out.println("Press [Enter] to stop.");
     System.in.read();
 
@@ -73,11 +134,12 @@ public class StockAnalyserApplication {
     server.stop();
     conn.close();
     System.out.println("Server is STOPPED");
-  }
-
-  @Bean
-  public CommandLineRunner commandLineRunner(StockRepository repository) {
+*/
+ /*@Bean
+  public ApplicationRunner applicationRunner(StockRepository repository) throws Exception{
     return args -> {
+
+      // TODO: 2017-03-19 Read this from DB
       Arrays.asList("TD.TO", "SJ.TO", "ZCL.TO", "SNC.TO", "EMP-A.TO").forEach(ticker -> {
         try {
           yahoofinance.Stock stock = YahooFinance.get(ticker);
@@ -125,7 +187,7 @@ public class StockAnalyserApplication {
 
       repository.findAll().stream().forEach(t -> System.out.println(t));
     };
-  }
+  }*/
 }
 
 

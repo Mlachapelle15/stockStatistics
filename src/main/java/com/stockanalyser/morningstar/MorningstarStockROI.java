@@ -1,4 +1,4 @@
-package com.stockanalyser.stock.morningstar;
+package com.stockanalyser.morningstar;
 
 import java.math.BigDecimal;
 

@@ -1,4 +1,4 @@
-package com.stockanalyser.stock.morningstar;
+package com.stockanalyser.morningstar;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -45,11 +45,14 @@ public class MorningstarROIRequest {
       }
     }
 
-    String roi1y = tableData.size() >= tableHeader.indexOf("1-Year") ? tableData.get(tableHeader.indexOf("1-Year")) : "0";
-    String roi5y = tableData.size() >= tableHeader.indexOf("5-Year") ? tableData.get(tableHeader.indexOf("5-Year")) : "0";
-    String roi10y = tableData.size() >= tableHeader.indexOf("10-Year") ? tableData.get(tableHeader.indexOf("10-Year")) : "0";
-
-
-    return new MorningstarStockROI(roi1y, roi5y, roi10y);
+    try {
+      String roi1y = tableData.size() >= tableHeader.indexOf("1-Year") ? tableData.get(tableHeader.indexOf("1-Year")) : "0";
+      String roi5y = tableData.size() >= tableHeader.indexOf("5-Year") ? tableData.get(tableHeader.indexOf("5-Year")) : "0";
+      String roi10y = tableData.size() >= tableHeader.indexOf("10-Year") ? tableData.get(tableHeader.indexOf("10-Year")) : "0";
+      return new MorningstarStockROI(roi1y, roi5y, roi10y);
+    } catch (ArrayIndexOutOfBoundsException e) {
+      // TODO: 2017-03-20 solve this
+      return new MorningstarStockROI("0", "0", "0");
+    }
   }
 }

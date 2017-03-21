@@ -1,4 +1,4 @@
-package com.stockanalyser.controller;
+package com.stockanalyser.stock.controller;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.stockanalyser.model.Stock;
-import com.stockanalyser.model.StockScore;
-import com.stockanalyser.service.StockService;
+import com.stockanalyser.stock.model.Stock;
+import com.stockanalyser.stock.model.StockScore;
+import com.stockanalyser.stock.service.StockService;
 
 @RestController
 public class StockRestController {

@@ -1,4 +1,4 @@
-package com.stockanalyser.ticker;
+package com.stockanalyser;
 
 import java.util.ArrayList;
 import java.util.List;

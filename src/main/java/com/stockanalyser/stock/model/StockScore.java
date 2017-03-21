@@ -1,4 +1,4 @@
-package com.stockanalyser.model;
+package com.stockanalyser.stock.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -330,6 +330,10 @@ public class StockScore {
   }
 
   private BigDecimal computeScore(BigDecimal value, BigDecimal target, int maxScore, boolean lowerIsBest) {
+    if (value == null) {
+      return BigDecimal.ZERO;
+    }
+
     BigDecimal maxScoreDecimal = new BigDecimal(maxScore);
     int signum = value.signum();
 
@@ -347,15 +351,19 @@ public class StockScore {
 
     System.out.println("Percent diff from value(" + value + ") to target (" + target + ") %diff=" + percentDiffFromTarget);
     // note: if value is positive, we could return here and it
-    if(signum >= 0){
+    if (signum >= 0) {
       return capScore(percentDiffFromTarget, maxScoreDecimal);
-    }else {
+    } else {
       // TODO: 2017-03-18 validate that the whle algo is corrrect
       return capScore(percentDiffFromTarget.negate(), maxScoreDecimal);
     }
   }
 
   private BigDecimal computeScore(BigDecimal value, BigDecimal targetMin, BigDecimal targetMax, int maxScore, boolean lowerIsBest) {
+    if (value == null) {
+      return BigDecimal.ZERO;
+    }
+
     BigDecimal maxScoreDecimal = new BigDecimal(maxScore);
 
     if ((value.compareTo(targetMin) >= 0) && (value.compareTo(targetMax) <= 0)) {
@@ -365,7 +373,7 @@ public class StockScore {
     return computeScore(value, (value.compareTo(targetMin) >= 0) ? targetMax : targetMin, maxScore, lowerIsBest);
   }
 
-  private BigDecimal capScore(BigDecimal score, BigDecimal maxScore){
+  private BigDecimal capScore(BigDecimal score, BigDecimal maxScore) {
     BigDecimal result = score.min(maxScore).max(maxScore.negate());
     //System.out.println("Cap score. Score = " + score + " and maxScore = " + maxScore + " that give -> " + result);
     return result;

@@ -1,4 +1,4 @@
-package com.stockanalyser.model;
+package com.stockanalyser.stock.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -81,7 +81,7 @@ public class Stock {
     this.roe = roe;
     this.marketCap = Optional.ofNullable(marketCap).map(cap ->cap.divideToIntegralValue(BigDecimal.valueOf(1000000))).orElse(BigDecimal.ZERO);
     this.oneYearTargetPrice = oneYearTargetPrice;
-    this.ebitda = ebitda.divideToIntegralValue(BigDecimal.valueOf(1000000));
+    this.ebitda = Optional.ofNullable(ebitda).map(value->value.divideToIntegralValue(BigDecimal.valueOf(1000000))).orElse(BigDecimal.ZERO);
     this.shortRatio = shortRatio;
     this.bookValuePerShare = bookValuePerShare;
     this.dividendGrowth5y = dividendGrowth5y.multiply(HUNDREAD);
