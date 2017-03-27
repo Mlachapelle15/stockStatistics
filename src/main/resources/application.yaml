@@ -1,3 +1,11 @@
+stock:
+  score:
+    peTarget: 17.5
+    roiGrowthTarget: 15
+    fcfGrowthTarget: 10
+    divGrowthTarget: 25
+    epsGrowthTarget: 10
+
 tickers:
   list:
     - RY.TO

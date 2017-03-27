@@ -1,21 +1,31 @@
 package com.stockanalyser;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 @Configuration
-@ConfigurationProperties(prefix = "tickers")
-public class TickerListConfig {
-  private List<String> list;
+@ConfigurationProperties(prefix = "stock.score")
+public class StockScoreConfig {
+ /* private String peTest;
+  private BigDecimal peTarget;
 
-  TickerListConfig() {
-    this.list = new ArrayList<>();
+  StockScoreConfig() {
+    this.peTarget = BigDecimal.ZERO;
   }
 
-  public List<String> getList() {
-    return this.list;
+  public BigDecimal getPeTarget() {
+    return this.peTarget;
+  }
+
+
+  public String getPeTest() {
+    return peTest;
+  }*/
+
+  @Bean
+  public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+    return new PropertySourcesPlaceholderConfigurer();
   }
 }
