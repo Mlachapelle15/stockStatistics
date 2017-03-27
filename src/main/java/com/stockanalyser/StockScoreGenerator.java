@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import com.stockanalyser.stock.model.GrowthStockScore;
 import com.stockanalyser.stock.model.Stock;
 import com.stockanalyser.stock.model.StockScore;
 
@@ -46,23 +47,31 @@ public class StockScoreGenerator {
     BigDecimal fcfGrowth10y = computeScore(stock.getFcfGrowth10y(), targetFCFGrowth, TWO_HUNDREAD, 1, false);
     BigDecimal epsGrowth5y = computeScore(stock.getEpsGrowth5y(), targetEPSGrowth, TWO_HUNDREAD, 1, false);
     BigDecimal epsGrowth10y = computeScore(stock.getEpsGrowth10y(), targetEPSGrowth, TWO_HUNDREAD, 1, false);
-    BigDecimal score = pe
-        .add(payoutRatio)
-        .add(annualYieldPercent)
-        .add(dividendGrowth5y)
-        .add(dividendGrowth10y)
-        .add(roi1y)
-        .add(roi5y)
-        .add(roi10y)
-        .add(fcfGrowth5y)
-        .add(fcfGrowth10y)
-        .add(epsGrowth5y)
-        .add(epsGrowth10y);
-
     // TODO: 2017-03-16 manque la dette
     // TODO: 2017-03-18 we should stock eps,fcf... multipled by 100 instead og doing it here
 
-    return new StockScore(ticker, companyName, BigDecimal.ZERO, pe, BigDecimal.ZERO, annualYieldPercent, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, dividendGrowth5y, dividendGrowth10y, payoutRatio, BigDecimal.ZERO, epsGrowth5y, epsGrowth10y, BigDecimal.ZERO, fcfGrowth5y, fcfGrowth10y, roi1y, roi5y, roi10y, score);
+    return new StockScore(ticker, companyName, BigDecimal.ZERO, pe, BigDecimal.ZERO, annualYieldPercent, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, dividendGrowth5y, dividendGrowth10y, payoutRatio, BigDecimal.ZERO, epsGrowth5y, epsGrowth10y, BigDecimal.ZERO, fcfGrowth5y, fcfGrowth10y, roi1y, roi5y, roi10y);
+  }
+
+  public GrowthStockScore createGrowthScore(Stock stock) {
+    String ticker = stock.getTicker();
+    String companyName = stock.getCompanyName();
+    BigDecimal pe = Optional.ofNullable(stock.getPe()).map(value -> value.compareTo(MAX_PE) > 0).orElse(true)
+        ? BigDecimal.ONE.negate()
+        : computeScore(stock.getPe(), targetPE, 2, true);
+    // TODO: 2017-03-16 the use of 2 param with .20 to 10 is a hack. The value does not drop fast enough with the other method.
+    // TODO: 2017-03-16 Limit the result to be between maxScore and -maxScore
+    BigDecimal roi1y = computeScore(stock.getRoi1y(), targetROIGrowth, TWO_HUNDREAD, 1, false);
+    BigDecimal roi5y = computeScore(stock.getRoi5y(), targetROIGrowth, TWO_HUNDREAD, 1, false);
+    BigDecimal roi10y = computeScore(stock.getRoi10y(), targetROIGrowth, TWO_HUNDREAD, 1, false);
+    BigDecimal fcfGrowth5y = computeScore(stock.getFcfGrowth5y(), targetFCFGrowth, TWO_HUNDREAD, 1, false);
+    BigDecimal fcfGrowth10y = computeScore(stock.getFcfGrowth10y(), targetFCFGrowth, TWO_HUNDREAD, 1, false);
+    BigDecimal epsGrowth5y = computeScore(stock.getEpsGrowth5y(), targetEPSGrowth, TWO_HUNDREAD, 1, false);
+    BigDecimal epsGrowth10y = computeScore(stock.getEpsGrowth10y(), targetEPSGrowth, TWO_HUNDREAD, 1, false);
+    // TODO: 2017-03-16 manque la dette
+    // TODO: 2017-03-18 we should stock eps,fcf... multipled by 100 instead og doing it here
+
+    return new GrowthStockScore(ticker, companyName, pe, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, epsGrowth5y, epsGrowth10y, fcfGrowth5y, fcfGrowth10y, roi1y, roi5y, roi10y);
   }
 
   // TODO: 2017-03-15 I should create a DividendStockScore and a GrowthStockScore...

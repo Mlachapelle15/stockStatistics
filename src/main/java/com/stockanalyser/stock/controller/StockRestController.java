@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.stockanalyser.StockScoreGenerator;
+import com.stockanalyser.stock.model.GrowthStockScore;
 import com.stockanalyser.stock.model.Stock;
 import com.stockanalyser.stock.model.StockScore;
 import com.stockanalyser.stock.service.StockService;
@@ -30,6 +31,11 @@ public class StockRestController {
   @RequestMapping(path = "/stockScores", method = RequestMethod.GET)
   public List<StockScore> getAllStockScores() {
     return stockService.getAllStocks().stream().map(stockScoreGenerator::create).collect(Collectors.toList());
+  }
+
+  @RequestMapping(path = "/stockGrowthScores", method = RequestMethod.GET)
+  public List<GrowthStockScore> getAllGrowthStockScores() {
+    return stockService.getAllStocks().stream().map(stockScoreGenerator::createGrowthScore).collect(Collectors.toList());
   }
 
   // @RequestMapping(value = "/employee/{id}", method = RequestMethod.GET)

@@ -67,7 +67,7 @@ public class StockScore {
 
   }
 
-  public StockScore(String ticker, String companyName, BigDecimal dividendYield, BigDecimal pe, BigDecimal peg, BigDecimal annualYieldPercent, BigDecimal eps, BigDecimal roe, BigDecimal marketCap, BigDecimal oneYearTargetPrice, BigDecimal ebitda, BigDecimal shortRatio, BigDecimal bookValuePerShare, BigDecimal dividendGrowth5y, BigDecimal dividendGrowth10y, BigDecimal payoutRatio, BigDecimal morningstarStockEps, BigDecimal epsGrowth5y, BigDecimal epsGrowth10y, BigDecimal fcf, BigDecimal fcfGrowth5y, BigDecimal fcfGrowth10y, BigDecimal roi1y, BigDecimal roi5y, BigDecimal roi10y, BigDecimal score) {
+  public StockScore(String ticker, String companyName, BigDecimal dividendYield, BigDecimal pe, BigDecimal peg, BigDecimal annualYieldPercent, BigDecimal eps, BigDecimal roe, BigDecimal marketCap, BigDecimal oneYearTargetPrice, BigDecimal ebitda, BigDecimal shortRatio, BigDecimal bookValuePerShare, BigDecimal dividendGrowth5y, BigDecimal dividendGrowth10y, BigDecimal payoutRatio, BigDecimal morningstarStockEps, BigDecimal epsGrowth5y, BigDecimal epsGrowth10y, BigDecimal fcf, BigDecimal fcfGrowth5y, BigDecimal fcfGrowth10y, BigDecimal roi1y, BigDecimal roi5y, BigDecimal roi10y) {
     this.ticker = ticker;
     this.companyName = companyName;
     this.dividendYield = dividendYield;
@@ -93,7 +93,18 @@ public class StockScore {
     this.roi1y = roi1y;
     this.roi5y = roi5y;
     this.roi10y = roi10y;
-    this.score = score;
+    this.score = pe
+        .add(payoutRatio)
+        .add(annualYieldPercent)
+        .add(dividendGrowth5y)
+        .add(dividendGrowth10y)
+        .add(roi1y)
+        .add(roi5y)
+        .add(roi10y)
+        .add(fcfGrowth5y)
+        .add(fcfGrowth10y)
+        .add(epsGrowth5y)
+        .add(epsGrowth10y);
   }
 
   public String getTicker() {

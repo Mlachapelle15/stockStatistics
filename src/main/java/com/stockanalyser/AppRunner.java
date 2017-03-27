@@ -31,8 +31,6 @@ public class AppRunner implements ApplicationRunner {
 
   @Override
   public void run(ApplicationArguments applicationArguments) throws Exception {
-    // TODO: 2017-03-19 Read this from DB
-    //Arrays.asList("TD.TO", "SJ.TO", "ZCL.TO", "SNC.TO", "EMP-A.TO").forEach(ticker -> {
     tickerListConfig.getList().parallelStream().forEach(ticker -> {
       try {
         yahoofinance.Stock stock = YahooFinance.get(ticker);
