@@ -48,7 +48,6 @@ public class StockScoreGenerator {
     BigDecimal epsGrowth5y = computeScore(stock.getEpsGrowth5y(), targetEPSGrowth, TWO_HUNDREAD, 1, false);
     BigDecimal epsGrowth10y = computeScore(stock.getEpsGrowth10y(), targetEPSGrowth, TWO_HUNDREAD, 1, false);
     // TODO: 2017-03-16 manque la dette
-    // TODO: 2017-03-18 we should stock eps,fcf... multipled by 100 instead og doing it here
 
     return new StockScore(ticker, companyName, BigDecimal.ZERO, pe, BigDecimal.ZERO, annualYieldPercent, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, dividendGrowth5y, dividendGrowth10y, payoutRatio, BigDecimal.ZERO, epsGrowth5y, epsGrowth10y, BigDecimal.ZERO, fcfGrowth5y, fcfGrowth10y, roi1y, roi5y, roi10y);
   }
@@ -69,14 +68,9 @@ public class StockScoreGenerator {
     BigDecimal epsGrowth5y = computeScore(stock.getEpsGrowth5y(), targetEPSGrowth, TWO_HUNDREAD, 1, false);
     BigDecimal epsGrowth10y = computeScore(stock.getEpsGrowth10y(), targetEPSGrowth, TWO_HUNDREAD, 1, false);
     // TODO: 2017-03-16 manque la dette
-    // TODO: 2017-03-18 we should stock eps,fcf... multipled by 100 instead og doing it here
 
     return new GrowthStockScore(ticker, companyName, pe, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, epsGrowth5y, epsGrowth10y, fcfGrowth5y, fcfGrowth10y, roi1y, roi5y, roi10y);
   }
-
-  // TODO: 2017-03-15 I should create a DividendStockScore and a GrowthStockScore...
-  // todo(suite): ...because value or growth stock will have their score lowered with dividenv values
-
 
   private BigDecimal computeScore(BigDecimal value, BigDecimal target, int maxScore, boolean lowerIsBest) {
     if (value == null) {
@@ -99,7 +93,6 @@ public class StockScoreGenerator {
 
 
     System.out.println("Percent diff from value(" + value + ") to target (" + target + ") %diff=" + percentDiffFromTarget);
-    // note: if value is positive, we could return here and it
     if (signum >= 0) {
       return capScore(percentDiffFromTarget, maxScoreDecimal);
     } else {
@@ -124,7 +117,6 @@ public class StockScoreGenerator {
 
   private BigDecimal capScore(BigDecimal score, BigDecimal maxScore) {
     BigDecimal result = score.min(maxScore).max(maxScore.negate());
-    //System.out.println("Cap score. Score = " + score + " and maxScore = " + maxScore + " that give -> " + result);
     return result;
   }
 }
