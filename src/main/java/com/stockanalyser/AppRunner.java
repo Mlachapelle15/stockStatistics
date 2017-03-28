@@ -42,6 +42,7 @@ public class AppRunner implements ApplicationRunner {
         Morningstar.MorningstarStock morningstarStock = MorningstarQuotesRequest.getQuotes(ticker);
         MorningstarStockROI roi = MorningstarROIRequest.getQuotes(ticker);
 
+        // TODO: 2017-03-28 refactor the constructor
         Stock newStock = new Stock(stock.getSymbol(),
             stock.getName(),
             stock.getQuote().getPrice(),
@@ -66,7 +67,9 @@ public class AppRunner implements ApplicationRunner {
             morningstarStock.getFcfGrowth10y(),
             roi.getRoi1y(),
             roi.getRoi5y(),
-            roi.getRoi10y());
+            roi.getRoi10y(),
+            morningstarStock.getRevenueGrowth5y(),
+            morningstarStock.getDividendGrowth10y());
 
         repository.save(newStock);
       } catch (IOException e) {

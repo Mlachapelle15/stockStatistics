@@ -29,6 +29,8 @@ public class Morningstar {
     private BigDecimal fcfGrowth10y;
     private BigDecimal fcfGrowth5y;
     private BigDecimal fcf;
+    private BigDecimal revenueGrowth5y;
+    private BigDecimal revenueGrowth10y;
 
     public MorningstarStock() {
     }
@@ -39,6 +41,7 @@ public class Morningstar {
       computePayoutRatio(getParsedCsvFromRegex(parsedCsv, Pattern.compile("Payout Ratio", Pattern.CASE_INSENSITIVE)));
       computeEPSStats(getParsedCsvFromRegex(parsedCsv, Pattern.compile("Earnings Per Share CAD", Pattern.CASE_INSENSITIVE)));
       computeFCFStats(getParsedCsvFromRegex(parsedCsv, Pattern.compile("Free Cash Flow Per Share", Pattern.CASE_INSENSITIVE)));
+      computeRevenueStats(getParsedCsvFromRegex(parsedCsv, Pattern.compile("Revenue CAD Mil", Pattern.CASE_INSENSITIVE)));
     }
 
     private List<BigDecimal> getParsedCsvFromRegex(Map<String, List<String>> parsedCsv, Pattern regex) {
@@ -87,8 +90,15 @@ public class Morningstar {
     private void computeFCFStats(List<BigDecimal> fcfValues) {
       if (fcfValues.size() > 0) {
         fcf = fcfValues.get(0);
-        compute5yAverage(fcfValues).ifPresent(divGrowth -> fcfGrowth5y = divGrowth);
-        compute10yAverage(fcfValues).ifPresent(divGrowth -> fcfGrowth10y = divGrowth);
+        compute5yAverage(fcfValues).ifPresent(growth -> fcfGrowth5y = growth);
+        compute10yAverage(fcfValues).ifPresent(growth -> fcfGrowth10y = growth);
+      }
+    }
+
+    private void computeRevenueStats(List<BigDecimal> parsedCsvFromRegex) {
+      if (parsedCsvFromRegex.size() > 0) {
+        compute5yAverage(parsedCsvFromRegex).ifPresent(growth -> revenueGrowth5y = growth);
+        compute10yAverage(parsedCsvFromRegex).ifPresent(growth -> revenueGrowth10y = growth);
       }
     }
 
@@ -140,6 +150,14 @@ public class Morningstar {
 
     public BigDecimal getFcf() {
       return fcf;
+    }
+
+    public BigDecimal getRevenueGrowth10y() {
+      return revenueGrowth10y;
+    }
+
+    public BigDecimal getRevenueGrowth5y() {
+      return revenueGrowth5y;
     }
   }
 

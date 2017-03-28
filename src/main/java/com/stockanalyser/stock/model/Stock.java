@@ -65,12 +65,16 @@ public class Stock {
   private BigDecimal roi10y;
   @Column
   private BigDecimal score;
+  @Column
+  private BigDecimal revenueGrowth5y;
+  @Column
+  private BigDecimal revenueGrowth10y;
 
   public Stock() {
 
   }
 
-  public Stock(String symbol, String name, BigDecimal quote, BigDecimal pe, BigDecimal peg, BigDecimal annualYieldPercent, BigDecimal eps, BigDecimal roe, BigDecimal marketCap, BigDecimal oneYearTargetPrice, BigDecimal ebitda, BigDecimal shortRatio, BigDecimal bookValuePerShare, BigDecimal dividendGrowth5y, BigDecimal dividendGrowth10y, BigDecimal payoutRatio, BigDecimal morningstarStockEps, BigDecimal epsGrowth5y, BigDecimal epsGrowth10y, BigDecimal fcf, BigDecimal fcfGrowth5y, BigDecimal fcfGrowth10y, BigDecimal roi1y, BigDecimal roi5y, BigDecimal roi10y) {
+  public Stock(String symbol, String name, BigDecimal quote, BigDecimal pe, BigDecimal peg, BigDecimal annualYieldPercent, BigDecimal eps, BigDecimal roe, BigDecimal marketCap, BigDecimal oneYearTargetPrice, BigDecimal ebitda, BigDecimal shortRatio, BigDecimal bookValuePerShare, BigDecimal dividendGrowth5y, BigDecimal dividendGrowth10y, BigDecimal payoutRatio, BigDecimal morningstarStockEps, BigDecimal epsGrowth5y, BigDecimal epsGrowth10y, BigDecimal fcf, BigDecimal fcfGrowth5y, BigDecimal fcfGrowth10y, BigDecimal roi1y, BigDecimal roi5y, BigDecimal roi10y, BigDecimal revenueGrowth5y, BigDecimal revenueGrowth10y) {
     this.ticker = symbol;
     this.companyName = name;
     this.quote = quote;
@@ -96,6 +100,8 @@ public class Stock {
     this.roi1y = roi1y;
     this.roi5y = roi5y;
     this.roi10y = roi10y;
+    this.revenueGrowth5y = revenueGrowth5y;
+    this.revenueGrowth10y = revenueGrowth10y;
     this.score = BigDecimal.ZERO;
   }
 
@@ -313,5 +319,21 @@ public class Stock {
 
   public void setQuote(BigDecimal quote) {
     this.quote = quote;
+  }
+
+  public BigDecimal getRevenueGrowth10y() {
+    return revenueGrowth10y;
+  }
+
+  public void setRevenueGrowth10y(BigDecimal revenueGrowth10y) {
+    this.revenueGrowth10y = revenueGrowth10y;
+  }
+
+  public BigDecimal getRevenueGrowth5y() {
+    return revenueGrowth5y;
+  }
+
+  public void setRevenueGrowth5y(BigDecimal revenueGrowth5y) {
+    this.revenueGrowth5y = revenueGrowth5y;
   }
 }

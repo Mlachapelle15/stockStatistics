@@ -61,13 +61,17 @@ public class StockScore {
   @Column
   private BigDecimal roi10y;
   @Column
+  private BigDecimal revenueGrowth5y;
+  @Column
+  private BigDecimal revenueGrowth10y;
+  @Column
   private BigDecimal score;
 
   public StockScore() {
 
   }
 
-  public StockScore(String ticker, String companyName, BigDecimal dividendYield, BigDecimal pe, BigDecimal peg, BigDecimal annualYieldPercent, BigDecimal eps, BigDecimal roe, BigDecimal marketCap, BigDecimal oneYearTargetPrice, BigDecimal ebitda, BigDecimal shortRatio, BigDecimal bookValuePerShare, BigDecimal dividendGrowth5y, BigDecimal dividendGrowth10y, BigDecimal payoutRatio, BigDecimal morningstarStockEps, BigDecimal epsGrowth5y, BigDecimal epsGrowth10y, BigDecimal fcf, BigDecimal fcfGrowth5y, BigDecimal fcfGrowth10y, BigDecimal roi1y, BigDecimal roi5y, BigDecimal roi10y) {
+  public StockScore(String ticker, String companyName, BigDecimal dividendYield, BigDecimal pe, BigDecimal peg, BigDecimal annualYieldPercent, BigDecimal eps, BigDecimal roe, BigDecimal marketCap, BigDecimal oneYearTargetPrice, BigDecimal ebitda, BigDecimal shortRatio, BigDecimal bookValuePerShare, BigDecimal dividendGrowth5y, BigDecimal dividendGrowth10y, BigDecimal payoutRatio, BigDecimal morningstarStockEps, BigDecimal epsGrowth5y, BigDecimal epsGrowth10y, BigDecimal fcf, BigDecimal fcfGrowth5y, BigDecimal fcfGrowth10y, BigDecimal roi1y, BigDecimal roi5y, BigDecimal roi10y,BigDecimal revenueGrowth5y, BigDecimal revenueGrowth10y) {
     this.ticker = ticker;
     this.companyName = companyName;
     this.dividendYield = dividendYield;
@@ -93,6 +97,8 @@ public class StockScore {
     this.roi1y = roi1y;
     this.roi5y = roi5y;
     this.roi10y = roi10y;
+    this.revenueGrowth5y = revenueGrowth5y;
+    this.revenueGrowth10y = revenueGrowth10y;
     this.score = pe
         .add(payoutRatio)
         .add(annualYieldPercent)
@@ -104,7 +110,9 @@ public class StockScore {
         .add(fcfGrowth5y)
         .add(fcfGrowth10y)
         .add(epsGrowth5y)
-        .add(epsGrowth10y);
+        .add(epsGrowth10y)
+        .add(revenueGrowth5y)
+        .add(revenueGrowth10y);
   }
 
   public String getTicker() {
@@ -313,5 +321,21 @@ public class StockScore {
 
   public void setScore(BigDecimal score) {
     this.score = score;
+  }
+
+  public BigDecimal getRevenueGrowth5y() {
+    return revenueGrowth5y;
+  }
+
+  public void setRevenueGrowth5y(BigDecimal revenueGrowth5y) {
+    this.revenueGrowth5y = revenueGrowth5y;
+  }
+
+  public BigDecimal getRevenueGrowth10y() {
+    return revenueGrowth10y;
+  }
+
+  public void setRevenueGrowth10y(BigDecimal revenueGrowth10y) {
+    this.revenueGrowth10y = revenueGrowth10y;
   }
 }

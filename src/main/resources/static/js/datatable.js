@@ -17,7 +17,6 @@ $(document).ready( function () {
                   { "mData": "ebitda"},
                   { "mData": "shortRatio"},
                   { "mData": "bookValuePerShare"},
-
                   { "mData": "dividendGrowth5y"},
                   { "mData": "dividendGrowth10y"},
                   { "mData": "payoutRatio"},
@@ -63,6 +62,8 @@ $(document).ready( function () {
                   { "mData": "roi1y"},
                   { "mData": "roi5y"},
                   { "mData": "roi10y"},
+                  { "mData": "revenueGrowth5y"},
+                  { "mData": "revenueGrowth10y"},
                   { "mData": "score"}
      			]
      	 })

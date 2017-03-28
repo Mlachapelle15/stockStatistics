@@ -43,13 +43,17 @@ public class GrowthStockScore {
   @Column
   private BigDecimal roi10y;
   @Column
+  private BigDecimal revenueGrowth5y;
+  @Column
+  private BigDecimal revenueGrowth10y;
+  @Column
   private BigDecimal score;
 
   public GrowthStockScore() {
 
   }
 
-  public GrowthStockScore(String ticker, String companyName, BigDecimal pe, BigDecimal peg, BigDecimal roe, BigDecimal oneYearTargetPrice, BigDecimal ebitda, BigDecimal shortRatio, BigDecimal bookValuePerShare, BigDecimal epsGrowth5y, BigDecimal epsGrowth10y, BigDecimal fcfGrowth5y, BigDecimal fcfGrowth10y, BigDecimal roi5y, BigDecimal roi10y) {
+  public GrowthStockScore(String ticker, String companyName, BigDecimal pe, BigDecimal peg, BigDecimal roe, BigDecimal oneYearTargetPrice, BigDecimal ebitda, BigDecimal shortRatio, BigDecimal bookValuePerShare, BigDecimal epsGrowth5y, BigDecimal epsGrowth10y, BigDecimal fcfGrowth5y, BigDecimal fcfGrowth10y, BigDecimal roi5y, BigDecimal roi10y, BigDecimal revenueGrowth5y, BigDecimal revenueGrowth10y) {
     this.ticker = ticker;
     this.companyName = companyName;
     this.pe = pe;
@@ -65,13 +69,17 @@ public class GrowthStockScore {
     this.fcfGrowth10y = fcfGrowth10y;
     this.roi5y = roi5y;
     this.roi10y = roi10y;
+    this.revenueGrowth5y = revenueGrowth5y;
+    this.revenueGrowth10y = revenueGrowth10y;
     this.score = pe
         .add(roi5y)
         .add(roi10y)
         .add(fcfGrowth5y)
         .add(fcfGrowth10y)
         .add(epsGrowth5y)
-        .add(epsGrowth10y);
+        .add(epsGrowth10y)
+        .add(revenueGrowth5y)
+        .add(revenueGrowth10y);
   }
 
   public String getTicker() {
@@ -208,5 +216,21 @@ public class GrowthStockScore {
 
   public void setScore(BigDecimal score) {
     this.score = score;
+  }
+
+  public BigDecimal getRevenueGrowth10y() {
+    return revenueGrowth10y;
+  }
+
+  public void setRevenueGrowth10y(BigDecimal revenueGrowth10y) {
+    this.revenueGrowth10y = revenueGrowth10y;
+  }
+
+  public BigDecimal getRevenueGrowth5y() {
+    return revenueGrowth5y;
+  }
+
+  public void setRevenueGrowth5y(BigDecimal revenueGrowth5y) {
+    this.revenueGrowth5y = revenueGrowth5y;
   }
 }

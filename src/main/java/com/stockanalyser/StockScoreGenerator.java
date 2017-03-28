@@ -22,10 +22,14 @@ public class StockScoreGenerator {
   private BigDecimal targetDIVGrowth;
   @Value("${stock.score.epsGrowthTarget}")
   private BigDecimal targetEPSGrowth;
+  @Value("${stock.score.revenueGrowthTarget}")
+  private BigDecimal targetRevenueGrowth;
 
 
   private static final BigDecimal MAX_PE = new BigDecimal(25);
   private static final BigDecimal TWO_HUNDREAD = new BigDecimal(200);
+
+  // TODO: 2017-03-28 Maybe I should compute the score thinking they other way. It's 0 until target and if you meet the target you start earning score.
 
   public StockScore create(Stock stock) {
     String ticker = stock.getTicker();
@@ -47,9 +51,12 @@ public class StockScoreGenerator {
     BigDecimal fcfGrowth10y = computeScore(stock.getFcfGrowth10y(), targetFCFGrowth, TWO_HUNDREAD, 1, false);
     BigDecimal epsGrowth5y = computeScore(stock.getEpsGrowth5y(), targetEPSGrowth, TWO_HUNDREAD, 1, false);
     BigDecimal epsGrowth10y = computeScore(stock.getEpsGrowth10y(), targetEPSGrowth, TWO_HUNDREAD, 1, false);
+    BigDecimal revenueGrowth5y = computeScore(stock.getRevenueGrowth5y(), targetRevenueGrowth, TWO_HUNDREAD, 1, false);
+    BigDecimal revenueGrowth10y = computeScore(stock.getRevenueGrowth10y(), targetRevenueGrowth, TWO_HUNDREAD, 1, false);
+
     // TODO: 2017-03-16 manque la dette
 
-    return new StockScore(ticker, companyName, BigDecimal.ZERO, pe, BigDecimal.ZERO, annualYieldPercent, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, dividendGrowth5y, dividendGrowth10y, payoutRatio, BigDecimal.ZERO, epsGrowth5y, epsGrowth10y, BigDecimal.ZERO, fcfGrowth5y, fcfGrowth10y, roi1y, roi5y, roi10y);
+    return new StockScore(ticker, companyName, BigDecimal.ZERO, pe, BigDecimal.ZERO, annualYieldPercent, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, dividendGrowth5y, dividendGrowth10y, payoutRatio, BigDecimal.ZERO, epsGrowth5y, epsGrowth10y, BigDecimal.ZERO, fcfGrowth5y, fcfGrowth10y, roi1y, roi5y, roi10y, revenueGrowth5y, revenueGrowth10y);
   }
 
   public GrowthStockScore createGrowthScore(Stock stock) {
@@ -67,9 +74,11 @@ public class StockScoreGenerator {
     BigDecimal fcfGrowth10y = computeScore(stock.getFcfGrowth10y(), targetFCFGrowth, TWO_HUNDREAD, 1, false);
     BigDecimal epsGrowth5y = computeScore(stock.getEpsGrowth5y(), targetEPSGrowth, TWO_HUNDREAD, 1, false);
     BigDecimal epsGrowth10y = computeScore(stock.getEpsGrowth10y(), targetEPSGrowth, TWO_HUNDREAD, 1, false);
+    BigDecimal revenueGrowth5y = computeScore(stock.getRevenueGrowth5y(), targetRevenueGrowth, TWO_HUNDREAD, 1, false);
+    BigDecimal revenueGrowth10y = computeScore(stock.getRevenueGrowth10y(), targetRevenueGrowth, TWO_HUNDREAD, 1, false);
     // TODO: 2017-03-16 manque la dette
 
-    return new GrowthStockScore(ticker, companyName, pe, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, epsGrowth5y, epsGrowth10y, fcfGrowth5y, fcfGrowth10y, roi1y, roi5y, roi10y);
+    return new GrowthStockScore(ticker, companyName, pe, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, epsGrowth5y, epsGrowth10y, fcfGrowth5y, fcfGrowth10y, roi1y, roi5y, roi10y, revenueGrowth5y, revenueGrowth10y);
   }
 
   private BigDecimal computeScore(BigDecimal value, BigDecimal target, int maxScore, boolean lowerIsBest) {
